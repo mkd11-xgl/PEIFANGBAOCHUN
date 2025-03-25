@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调色匠配方计算工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            margin: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        @media (max-width: 600px) {
+            input[type="number"], input[type="text"] {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            table {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 添加 logo 图片 -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <img src="logo1.png" alt="调色匠涂料" style="max-width: 200px; height: auto;" />
+    </div>
+
+    <h1>调色匠配方计算工具</h1>
+
+    <!-- 大货投放数量和计算按钮 -->
+    <div style="margin-bottom: 20px;">
+        <label for="totalQuantity">大货投放数量 (kg): </label>
+        <input type="number" id="totalQuantity" placeholder="输入大货投放数量" />
+        <button class="btn" onclick="calculate()">计算</button>
+    </div>
+
+    <!-- 配方表格 -->
+    <table id="formulaTable">
+        <thead>
+            <tr>
+                <th>原材料名称</th>
+                <th>原始投料数量 (kg)</th>
+                <th>百分比 (%)</th>
+                <th>大货投放数量 (kg)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 保留15行代码不动 -->
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // 更新百分比
+        function updatePercentage() {
+            let totalWeight = 0;
+            // 计算原料总数量
+            document.querySelectorAll('.inputWeight').forEach(input => {
+                totalWeight += parseFloat(input.value) || 0;
+            });
+
+            // 更新百分比
+            document.querySelectorAll('.inputWeight').forEach((input, index) => {
+                const percentageInput = document.querySelectorAll('.percentage')[index];
+                const weight = parseFloat(input.value) || 0;
+                const percentage = (weight / totalWeight * 100) || 0;
+                percentageInput.value = percentage.toFixed(2) + "%";
+            });
+        }
+
+        // 计算大货投放数量
+        function calculate() {
+            const totalQuantity = parseFloat(document.getElementById('totalQuantity').value) || 0;
+
+            document.querySelectorAll('.percentage').forEach((percentageInput, index) => {
+                const percentage = parseFloat(percentageInput.value.replace('%', '')) || 0;
+                const totalAmountInput = document.querySelectorAll('.totalAmount')[index];
+                const totalAmount = (percentage / 100) * totalQuantity;
+                totalAmountInput.value = totalAmount.toFixed(3) + " kg";  // 显示三位小数
+            });
+        }
+    </script>
+</body>
+</html>
