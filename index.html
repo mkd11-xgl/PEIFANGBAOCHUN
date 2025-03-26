@@ -59,6 +59,15 @@
 
     <h1>调色匠配方计算工具</h1>
 
+    <!-- 合并配方编号和配方名称的输入框 -->
+    <div style="margin-bottom: 20px;">
+        <label for="formulaIdName">配方编号及名称: </label>
+        <input type="text" id="formulaIdName" placeholder="请输入配方编号和配方名称，格式：编号 - 名称" />
+        
+        <label for="customerName">客户名称: </label>
+        <input type="text" id="customerName" placeholder="请输入客户名称" />
+    </div>
+
     <!-- 大货投放数量和计算按钮 -->
     <div style="margin-bottom: 20px;">
         <label for="totalQuantity">大货投放数量 (kg): </label>
@@ -78,12 +87,6 @@
         </thead>
         <tbody>
             <!-- 保留15行代码不动 -->
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
             <tr>
                 <td><input type="text" placeholder="原材料名称" /></td>
                 <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
@@ -175,54 +178,6 @@
                 const totalAmount = (percentage / 100) * totalQuantity;
                 totalAmountInput.value = totalAmount.toFixed(3) + " kg";  // 显示三位小数
             });
-        }
-    </script>
-
-    <!-- 模块保存功能 -->
-    <div style="margin-top: 20px;">
-        <button class="btn" onclick="saveFormula()">保存配方</button>
-        <button class="btn" onclick="viewSavedFormulas()">查看保存的配方</button>
-    </div>
-
-    <div id="savedFormulas" style="margin-top: 20px;"></div>
-
-    <script>
-        let savedFormulas = [];
-
-        // 保存配方
-        function saveFormula() {
-            const formula = [];
-            document.querySelectorAll('#formulaTable tbody tr').forEach((row, index) => {
-                const name = row.querySelector('td input[type="text"]').value;
-                const weight = row.querySelector('td input[type="number"]').value;
-                const percentage = row.querySelector('td input[type="text"].percentage').value;
-                const totalAmount = row.querySelector('td input[type="text"].totalAmount').value;
-                if (name && weight && percentage && totalAmount) {
-                    formula.push({ name, weight, percentage, totalAmount });
-                }
-            });
-
-            if (formula.length > 0) {
-                savedFormulas.push(formula);
-                alert('配方已保存');
-            } else {
-                alert('请填写完整的配方信息');
-            }
-        }
-
-        // 查看保存的配方
-        function viewSavedFormulas() {
-            let formulasHtml = '<h3>保存的配方</h3><table border="1" style="width: 100%;">';
-            formulasHtml += '<tr><th>配方名称</th><th>原料名称</th><th>原始投料数量</th><th>百分比</th><th>大货投放数量</th></tr>';
-
-            savedFormulas.forEach((formula, index) => {
-                formula.forEach(item => {
-                    formulasHtml += `<tr><td>配方 ${index + 1}</td><td>${item.name}</td><td>${item.weight}</td><td>${item.percentage}</td><td>${item.totalAmount}</td></tr>`;
-                });
-            });
-
-            formulasHtml += '</table>';
-            document.getElementById('savedFormulas').innerHTML = formulasHtml;
         }
     </script>
 </body>
