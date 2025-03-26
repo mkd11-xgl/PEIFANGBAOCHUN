@@ -59,13 +59,20 @@
 
     <h1>调色匠配方计算工具</h1>
 
-    <!-- 合并配方编号和配方名称的输入框 -->
+    <!-- 配方编号和名称 -->
     <div style="margin-bottom: 20px;">
-        <label for="formulaIdName">配方编号及名称: </label>
-        <input type="text" id="formulaIdName" placeholder="请输入配方编号和配方名称，格式：编号 - 名称" />
-        
+        <label for="formulaID">配方编号: </label>
+        <input type="text" id="formulaID" placeholder="输入配方编号" />
+    </div>
+    <div style="margin-bottom: 20px;">
+        <label for="formulaName">配方名称: </label>
+        <input type="text" id="formulaName" placeholder="输入配方名称" />
+    </div>
+
+    <!-- 客户名称 -->
+    <div style="margin-bottom: 20px;">
         <label for="customerName">客户名称: </label>
-        <input type="text" id="customerName" placeholder="请输入客户名称" />
+        <input type="text" id="customerName" placeholder="输入客户名称" />
     </div>
 
     <!-- 大货投放数量和计算按钮 -->
@@ -86,13 +93,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- 15或16个原材料输入框 -->
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
+            <!-- 增加到16个输入行，符合需求 -->
             <tr>
                 <td><input type="text" placeholder="原材料名称" /></td>
                 <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
@@ -174,6 +175,11 @@
         </tbody>
     </table>
 
+    <!-- 保存为文本文件按钮 -->
+    <div style="margin-top: 20px;">
+        <button class="btn" onclick="saveToFile()">保存为文本文件</button>
+    </div>
+
     <script>
         // 更新百分比
         function updatePercentage() {
@@ -202,6 +208,24 @@
                 const totalAmount = (percentage / 100) * totalQuantity;
                 totalAmountInput.value = totalAmount.toFixed(3) + " kg";  // 显示三位小数
             });
+        }
+
+        // 保存为文本文件
+        function saveToFile() {
+            let content = `配方编号: ${document.getElementById('formulaID').value}\n配方名称: ${document.getElementById('formulaName').value}\n客户名称: ${document.getElementById('customerName').value}\n\n`;
+
+            document.querySelectorAll('tr').forEach((row, index) => {
+                if (index > 0) {  // 跳过表头
+                    const cells = row.querySelectorAll('td input');
+                    content += `${cells[0].value} | ${cells[1].value} | ${cells[2].value} | ${cells[3].value}\n`;
+                }
+            });
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '配方数据.txt';
+            link.click();
         }
     </script>
 </body>
