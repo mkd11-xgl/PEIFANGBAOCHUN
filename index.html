@@ -52,37 +52,19 @@
     </style>
 </head>
 <body>
-    <!-- 添加 logo 图片 -->
     <div style="text-align: center; margin-bottom: 20px;">
         <img src="logo1.png" alt="调色匠涂料" style="max-width: 200px; height: auto;" />
     </div>
 
     <h1>调色匠配方计算工具</h1>
 
-    <!-- 配方编号和名称 -->
-    <div style="margin-bottom: 20px;">
-        <label for="formulaID">配方编号: </label>
-        <input type="text" id="formulaID" placeholder="输入配方编号" />
-    </div>
-    <div style="margin-bottom: 20px;">
-        <label for="formulaName">配方名称: </label>
-        <input type="text" id="formulaName" placeholder="输入配方名称" />
-    </div>
-
-    <!-- 客户名称 -->
-    <div style="margin-bottom: 20px;">
-        <label for="customerName">客户名称: </label>
-        <input type="text" id="customerName" placeholder="输入客户名称" />
-    </div>
-
-    <!-- 大货投放数量和计算按钮 -->
     <div style="margin-bottom: 20px;">
         <label for="totalQuantity">大货投放数量 (kg): </label>
         <input type="number" id="totalQuantity" placeholder="输入大货投放数量" />
         <button class="btn" onclick="calculate()">计算</button>
+        <button class="btn" onclick="saveToExcel()">保存为Excel</button>
     </div>
 
-    <!-- 配方表格 -->
     <table id="formulaTable">
         <thead>
             <tr>
@@ -93,7 +75,6 @@
             </tr>
         </thead>
         <tbody>
-            <!-- 增加到16个输入行，符合需求 -->
             <tr>
                 <td><input type="text" placeholder="原材料名称" /></td>
                 <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
@@ -175,21 +156,15 @@
         </tbody>
     </table>
 
-    <!-- 保存为文本文件按钮 -->
-    <div style="margin-top: 20px;">
-        <button class="btn" onclick="saveToFile()">保存为文本文件</button>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 
     <script>
-        // 更新百分比
         function updatePercentage() {
             let totalWeight = 0;
-            // 计算原料总数量
             document.querySelectorAll('.inputWeight').forEach(input => {
                 totalWeight += parseFloat(input.value) || 0;
             });
 
-            // 更新百分比
             document.querySelectorAll('.inputWeight').forEach((input, index) => {
                 const percentageInput = document.querySelectorAll('.percentage')[index];
                 const weight = parseFloat(input.value) || 0;
@@ -198,7 +173,6 @@
             });
         }
 
-        // 计算大货投放数量
         function calculate() {
             const totalQuantity = parseFloat(document.getElementById('totalQuantity').value) || 0;
 
@@ -206,26 +180,28 @@
                 const percentage = parseFloat(percentageInput.value.replace('%', '')) || 0;
                 const totalAmountInput = document.querySelectorAll('.totalAmount')[index];
                 const totalAmount = (percentage / 100) * totalQuantity;
-                totalAmountInput.value = totalAmount.toFixed(3) + " kg";  // 显示三位小数
+                totalAmountInput.value = totalAmount.toFixed(3) + " kg";
             });
         }
 
-        // 保存为文本文件
-        function saveToFile() {
-            let content = `配方编号: ${document.getElementById('formulaID').value}\n配方名称: ${document.getElementById('formulaName').value}\n客户名称: ${document.getElementById('customerName').value}\n\n`;
-
-            document.querySelectorAll('tr').forEach((row, index) => {
-                if (index > 0) {  // 跳过表头
-                    const cells = row.querySelectorAll('td input');
-                    content += `${cells[0].value} | ${cells[1].value} | ${cells[2].value} | ${cells[3].value}\n`;
+        function saveToExcel() {
+            let data = [];
+            const table = document.getElementById('formulaTable');
+            const rows = table.querySelectorAll('tr');
+            rows.forEach(row => {
+                const rowData = [];
+                row.querySelectorAll('td input').forEach(input => {
+                    rowData.push(input.value);
+                });
+                if (rowData.length > 0) {
+                    data.push(rowData);
                 }
             });
 
-            const blob = new Blob([content], { type: 'text/plain' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = '配方数据.txt';
-            link.click();
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '配方');
+            XLSX.writeFile(wb, '配方.xlsx');
         }
     </script>
 </body>
