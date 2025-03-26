@@ -1,102 +1,74 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>调色匠配方计算工具</title>
+    <title>配方管理系统</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
             background-color: #f4f4f9;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
         }
         table {
             width: 100%;
-            margin-top: 20px;
             border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
         }
         th, td {
             padding: 10px;
             text-align: center;
-            border: 1px solid #ccc;
         }
-        th {
-            background-color: #f2f2f2;
-        }
-        input[type="number"], input[type="text"] {
+        input {
             width: 100%;
-            padding: 5px;
-            margin: 5px;
-            font-size: 14px;
-            box-sizing: border-box;
+            padding: 8px;
+            margin: 5px 0;
         }
-        .btn {
-            padding: 10px 20px;
-            background-color: #4CAF50;
+        .button {
+            background-color: #28a745;
             color: white;
+            padding: 10px 15px;
             border: none;
             cursor: pointer;
         }
-        .btn:hover {
-            background-color: #45a049;
+        .button:hover {
+            background-color: #218838;
         }
-        @media (max-width: 600px) {
-            input[type="number"], input[type="text"] {
-                width: 100%;
-                box-sizing: border-box;
-            }
-            table {
-                font-size: 14px;
-            }
+        .button-back {
+            background-color: #dc3545;
         }
-        .module {
+        .button-back:hover {
+            background-color: #c82333;
+        }
+        .search-bar {
             padding: 10px;
-            margin-top: 10px;
-            background-color: #e0f7fa;
-            border: 1px solid #00796b;
-        }
-        .module h3 {
-            margin: 0;
-            font-size: 18px;
-        }
-        .module .content {
-            display: none;
-            margin-top: 10px;
-        }
-        .module .content.active {
-            display: block;
+            width: 100%;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <!-- 添加 logo 图片 -->
-    <div style="text-align: center; margin-bottom: 20px;">
-        <img src="logo1.png" alt="调色匠涂料" style="max-width: 200px; height: auto;" />
-    </div>
 
-    <h1>调色匠配方计算工具</h1>
+<header>
+    <h1>调色匠配方管理系统</h1>
+</header>
 
-    <!-- 配方和名称输入框 -->
-    <div style="margin-bottom: 20px;">
-        <label for="formulaName">配方和名称: </label>
-        <input type="text" id="formulaName" placeholder="输入配方和名称" />
-    </div>
-
-    <!-- 客户名称输入框 -->
-    <div style="margin-bottom: 20px;">
-        <label for="customerName">客户名称: </label>
-        <input type="text" id="customerName" placeholder="输入客户名称" />
-    </div>
-
-    <!-- 大货投放数量和计算按钮 -->
-    <div style="margin-bottom: 20px;">
-        <label for="totalQuantity">大货投放数量 (kg): </label>
-        <input type="number" id="totalQuantity" placeholder="输入大货投放数量" />
-        <button class="btn" onclick="calculate()">计算</button>
-        <button class="btn" onclick="saveFormula()">保存</button>
-    </div>
-
-    <!-- 配方表格 -->
+<!-- 主界面 -->
+<div id="mainInterface" class="container">
+    <h2>原材料配置</h2>
     <table id="formulaTable">
         <thead>
             <tr>
@@ -107,154 +79,85 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
+            <!-- 15行原材料 -->
+            <tr><td><input type="text" id="materialName1" placeholder="原材料名称"></td><td><input type="number" id="inputAmount1" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent1" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount1" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName2" placeholder="原材料名称"></td><td><input type="number" id="inputAmount2" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent2" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount2" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName3" placeholder="原材料名称"></td><td><input type="number" id="inputAmount3" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent3" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount3" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName4" placeholder="原材料名称"></td><td><input type="number" id="inputAmount4" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent4" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount4" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName5" placeholder="原材料名称"></td><td><input type="number" id="inputAmount5" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent5" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount5" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName6" placeholder="原材料名称"></td><td><input type="number" id="inputAmount6" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent6" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount6" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName7" placeholder="原材料名称"></td><td><input type="number" id="inputAmount7" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent7" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount7" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName8" placeholder="原材料名称"></td><td><input type="number" id="inputAmount8" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent8" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount8" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName9" placeholder="原材料名称"></td><td><input type="number" id="inputAmount9" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent9" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount9" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName10" placeholder="原材料名称"></td><td><input type="number" id="inputAmount10" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent10" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount10" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName11" placeholder="原材料名称"></td><td><input type="number" id="inputAmount11" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent11" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount11" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName12" placeholder="原材料名称"></td><td><input type="number" id="inputAmount12" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent12" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount12" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName13" placeholder="原材料名称"></td><td><input type="number" id="inputAmount13" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent13" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount13" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName14" placeholder="原材料名称"></td><td><input type="number" id="inputAmount14" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent14" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount14" readonly placeholder="大货投放数量"></td></tr>
+            <tr><td><input type="text" id="materialName15" placeholder="原材料名称"></td><td><input type="number" id="inputAmount15" onchange="updateFormula()" placeholder="输入数量"></td><td><input type="number" id="percent15" readonly placeholder="百分比"></td><td><input type="number" id="bulkAmount15" readonly placeholder="大货投放数量"></td></tr>
         </tbody>
     </table>
+    <button class="button" onclick="saveFormula()">保存配方</button>
+</div>
 
-    <!-- 二级界面 -->
-    <div id="secondaryInterface" style="display: none;">
-        <h2>配方仓库</h2>
-
-        <!-- 检索栏 -->
-        <input type="text" id="searchBar" placeholder="搜索模块" oninput="filterModules()" />
-        
-        <div id="moduleContainer">
-            <!-- 模块将动态生成 -->
-        </div>
-
-        <button class="btn" onclick="goBack()">返回</button>
+<!-- 二级界面（配方仓库） -->
+<div id="formulaWarehouse" class="container" style="display:none;">
+    <h2>配方仓库</h2>
+    <input class="search-bar" type="text" id="searchBar" oninput="searchFormula()" placeholder="搜索配方">
+    <div id="moduleContainer">
+        <!-- 配方模块内容动态生成 -->
     </div>
+    <button class="button button-back" onclick="backToMain()">返回主界面</button>
+</div>
 
-    <script>
-        // 更新百分比
-        function updatePercentage() {
-            let totalWeight = 0;
-            document.querySelectorAll('.inputWeight').forEach(input => {
-                totalWeight += parseFloat(input.value) || 0;
-            });
-
-            document.querySelectorAll('.inputWeight').forEach((input, index) => {
-                const percentageInput = document.querySelectorAll('.percentage')[index];
-                const weight = parseFloat(input.value) || 0;
-                const percentage = (weight / totalWeight * 100) || 0;
-                percentageInput.value = percentage.toFixed(2) + "%";
-            });
+<script>
+// 主界面原材料计算
+function updateFormula() {
+    let totalAmount = 0;
+    let amounts = [];
+    for (let i = 1; i <= 15; i++) {
+        let inputAmount = document.getElementById("inputAmount" + i).value;
+        if (inputAmount) {
+            amounts.push(Number(inputAmount));
+            totalAmount += Number(inputAmount);
         }
+    }
 
-        // 计算大货投放数量
-        function calculate() {
-            const totalQuantity = parseFloat(document.getElementById('totalQuantity').value) || 0;
-
-            document.querySelectorAll('.percentage').forEach((percentageInput, index) => {
-                const percentage = parseFloat(percentageInput.value.replace('%', '')) || 0;
-                const totalAmountInput = document.querySelectorAll('.totalAmount')[index];
-                const totalAmount = (percentage / 100) * totalQuantity;
-                totalAmountInput.value = totalAmount.toFixed(3) + " kg";
-            });
+    for (let i = 1; i <= 15; i++) {
+        let inputAmount = document.getElementById("inputAmount" + i).value;
+        if (inputAmount) {
+            let percent = (Number(inputAmount) / totalAmount) * 100;
+            document.getElementById("percent" + i).value = percent.toFixed(2);
+            document.getElementById("bulkAmount" + i).value = (percent / 100) * 1000; // 假设大货投放量为1000kg
         }
+    }
+}
 
-        // 保存配方
-        function saveFormula() {
-            const formulaName = document.getElementById('formulaName').value;
-            const customerName = document.getElementById('customerName').value;
+// 保存配方
+function saveFormula() {
+    alert("配方已保存");
+}
 
-            if (!formulaName || !customerName) {
-                alert("请填写配方和客户名称！");
-                return;
-            }
-
-            alert("配方已保存！");
+// 搜索配方
+function searchFormula() {
+    let searchValue = document.getElementById("searchBar").value.toLowerCase();
+    let modules = document.querySelectorAll(".formulaModule");
+    modules.forEach(module => {
+        let name = module.querySelector(".formulaName").innerText.toLowerCase();
+        if (name.includes(searchValue)) {
+            module.style.display = "block";
+        } else {
+            module.style.display = "none";
         }
+    });
+}
 
-        // 切换至二级界面
-        function goToSecondaryInterface() {
-            document.getElementById('secondaryInterface').style.display = 'block';
-        }
+// 返回主界面
+function backToMain() {
+    document.getElementById("formulaWarehouse").style.display = "none";
+    document.getElementById("mainInterface").style.display = "block";
+}
+</script>
 
-        // 返回到主界面
-        function goBack() {
-            document.getElementById('secondaryInterface').style.display = 'none';
-        }
-
-        // 模块过滤
-        function filterModules() {
-            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
-            const modules = document.querySelectorAll('.module');
-
-            modules.forEach(module => {
-                const title = module.querySelector('h3').innerText.toLowerCase();
-                if (title.includes(searchTerm)) {
-                    module.style.display = 'block';
-                } else {
-                    module.style.display = 'none';
-                }
-            });
-        }
-    </script>
 </body>
 </html>
