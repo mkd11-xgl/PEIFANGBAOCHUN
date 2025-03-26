@@ -75,6 +75,13 @@
             </tr>
         </thead>
         <tbody>
+            <!-- 保留16行输入栏 -->
+            <tr>
+                <td><input type="text" placeholder="原材料名称" /></td>
+                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+            </tr>
             <tr>
                 <td><input type="text" placeholder="原材料名称" /></td>
                 <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
@@ -156,15 +163,16 @@
         </tbody>
     </table>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
-
     <script>
+        // 更新百分比
         function updatePercentage() {
             let totalWeight = 0;
+            // 计算原料总数量
             document.querySelectorAll('.inputWeight').forEach(input => {
                 totalWeight += parseFloat(input.value) || 0;
             });
 
+            // 更新百分比
             document.querySelectorAll('.inputWeight').forEach((input, index) => {
                 const percentageInput = document.querySelectorAll('.percentage')[index];
                 const weight = parseFloat(input.value) || 0;
@@ -173,6 +181,7 @@
             });
         }
 
+        // 计算大货投放数量
         function calculate() {
             const totalQuantity = parseFloat(document.getElementById('totalQuantity').value) || 0;
 
@@ -180,10 +189,11 @@
                 const percentage = parseFloat(percentageInput.value.replace('%', '')) || 0;
                 const totalAmountInput = document.querySelectorAll('.totalAmount')[index];
                 const totalAmount = (percentage / 100) * totalQuantity;
-                totalAmountInput.value = totalAmount.toFixed(3) + " kg";
+                totalAmountInput.value = totalAmount.toFixed(3) + " kg";  // 显示三位小数
             });
         }
 
+        // 保存为Excel
         function saveToExcel() {
             let data = [];
             const table = document.getElementById('formulaTable');
