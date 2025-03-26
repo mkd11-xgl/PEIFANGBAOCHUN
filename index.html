@@ -1,239 +1,200 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>配方核算</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .container {
-            padding: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ccc;
-        }
-
-        th {
-            background-color: #f4f4f4;
-        }
-
-        input[type="number"], input[type="text"] {
-            width: 100%;
-            padding: 5px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .form-container {
-            margin-bottom: 20px;
-        }
-
-        .form-container input {
-            width: 200px;
-        }
-
-        .back-button {
-            margin-top: 20px;
-            display: block;
-            width: 200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .search-bar {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>配方计算工具</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    input[type="number"], input[type="text"] {
+      padding: 5px;
+      width: 100px;
+      margin: 5px 0;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .input-section, .output-section {
+      margin-bottom: 20px;
+    }
+    .input-section label, .output-section label {
+      font-weight: bold;
+    }
+    .input-section input[type="number"], .output-section input[type="number"] {
+      width: 150px;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>配方计算工具</h1>
+    
+    <div class="input-section">
+      <label for="inputFormula">输入配方名称：</label>
+      <input type="text" id="inputFormula" placeholder="配方名称">
 
-<header>
-    <h1>配方核算系统</h1>
-</header>
+      <label for="totalQuantity">总投放量 (kg)：</label>
+      <input type="number" id="totalQuantity" placeholder="请输入总投放量" required>
 
-<div class="container">
-    <div id="mainInterface">
-        <h2>原材料配方</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>原材料名称</th>
-                    <th>原始投料数量 (kg)</th>
-                    <th>百分比 (%)</th>
-                    <th>大货投放数量 (kg)</th>
-                </tr>
-            </thead>
-            <tbody id="ingredientsTableBody">
-                <!-- 15行原材料 -->
-                <tr>
-                    <td><input type="text" placeholder="原材料1" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料2" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料3" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料4" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料5" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料6" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料7" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料8" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料9" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料10" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料11" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料12" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料13" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料14" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-                <tr>
-                    <td><input type="text" placeholder="原材料15" /></td>
-                    <td><input type="number" class="input-quantity" value="0" /></td>
-                    <td><span class="percentage">0%</span></td>
-                    <td><span class="bulk-amount">0</span></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="form-container">
-            <label for="bulkQuantity">大货投放数量 (kg):</label>
-            <input type="number" id="bulkQuantity" value="0" />
-        </div>
-
-        <button id="calculateBtn">计算</button>
+      <button onclick="addRow()">添加原材料</button>
     </div>
 
-    <button class="back-button" id="backButton">返回主界面</button>
+    <div class="output-section">
+      <table id="formulaTable">
+        <thead>
+          <tr>
+            <th>原材料名称</th>
+            <th>原始投料数量 (kg)</th>
+            <th>百分比 (%)</th>
+            <th>大货投放数量 (kg)</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 这里将动态生成原材料数据 -->
+        </tbody>
+      </table>
 
-</div>
+      <button onclick="calculate()">计算大货投放数量</button>
+    </div>
 
-<script>
-    // 计算百分比和大货投放数量
-    document.getElementById('calculateBtn').addEventListener('click', function () {
-        let totalQuantity = 0;
-        const rows = document.querySelectorAll('#ingredientsTableBody tr');
-        rows.forEach(row => {
-            const quantity = parseFloat(row.querySelector('.input-quantity').value) || 0;
-            totalQuantity += quantity;
+    <div class="save-section">
+      <button onclick="saveFormula()">保存配方</button>
+    </div>
+  </div>
+
+  <script>
+    let formulaData = []; // 用来保存输入的原材料数据
+
+    function addRow() {
+      const tableBody = document.querySelector('#formulaTable tbody');
+      const row = document.createElement('tr');
+
+      row.innerHTML = `
+        <td><input type="text" placeholder="原材料名称" class="material-name"></td>
+        <td><input type="number" placeholder="原始投料数量" class="input-quantity"></td>
+        <td><input type="number" placeholder="百分比" class="input-percentage" disabled></td>
+        <td><input type="number" placeholder="大货投放数量" class="input-result" disabled></td>
+        <td><button onclick="removeRow(this)">删除</button></td>
+      `;
+
+      tableBody.appendChild(row);
+    }
+
+    function calculate() {
+      const totalQuantity = parseFloat(document.getElementById('totalQuantity').value);
+      if (isNaN(totalQuantity) || totalQuantity <= 0) {
+        alert("请输入有效的总投放量！");
+        return;
+      }
+
+      const rows = document.querySelectorAll('#formulaTable tbody tr');
+      let totalAmount = 0;
+
+      rows.forEach(row => {
+        const quantityInput = row.querySelector('.input-quantity');
+        const percentageInput = row.querySelector('.input-percentage');
+        const resultInput = row.querySelector('.input-result');
+        const materialName = row.querySelector('.material-name').value;
+
+        const quantity = parseFloat(quantityInput.value);
+        if (isNaN(quantity) || quantity <= 0) {
+          alert(`请输入有效的原材料 ${materialName} 数量！`);
+          return;
+        }
+
+        totalAmount += quantity;
+      });
+
+      rows.forEach(row => {
+        const quantityInput = row.querySelector('.input-quantity');
+        const percentageInput = row.querySelector('.input-percentage');
+        const resultInput = row.querySelector('.input-result');
+        const materialName = row.querySelector('.material-name').value;
+
+        const quantity = parseFloat(quantityInput.value);
+        const percentage = (quantity / totalAmount) * 100;
+
+        percentageInput.value = percentage.toFixed(2);
+
+        const result = (percentage / 100) * totalQuantity;
+        resultInput.value = result.toFixed(2);
+      });
+    }
+
+    function removeRow(button) {
+      const row = button.parentElement.parentElement;
+      row.parentElement.removeChild(row);
+    }
+
+    function saveFormula() {
+      const formulaName = document.getElementById('inputFormula').value;
+      if (!formulaName) {
+        alert("请输入配方名称！");
+        return;
+      }
+
+      const rows = document.querySelectorAll('#formulaTable tbody tr');
+      const formulaDetails = [];
+
+      rows.forEach(row => {
+        const materialName = row.querySelector('.material-name').value;
+        const quantity = parseFloat(row.querySelector('.input-quantity').value);
+        const percentage = parseFloat(row.querySelector('.input-percentage').value);
+        const result = parseFloat(row.querySelector('.input-result').value);
+
+        formulaDetails.push({
+          materialName,
+          quantity,
+          percentage,
+          result
         });
+      });
 
-        const bulkQuantity = parseFloat(document.getElementById('bulkQuantity').value) || 0;
+      // 保存数据（这里可以替换为真正的数据库保存逻辑）
+      formulaData.push({
+        formulaName,
+        formulaDetails
+      });
 
-        rows.forEach(row => {
-            const quantity = parseFloat(row.querySelector('.input-quantity').value) || 0;
-            const percentage = (quantity / totalQuantity) * 100 || 0;
-            const bulkAmount = (percentage / 100) * bulkQuantity || 0;
-
-            row.querySelector('.percentage').textContent = `${percentage.toFixed(2)}%`;
-            row.querySelector('.bulk-amount').textContent = bulkAmount.toFixed(2);
-        });
-    });
-
-    // 返回按钮事件
-    document.getElementById('backButton').addEventListener('click', function () {
-        alert('返回主界面');
-    });
-</script>
-
+      alert("配方保存成功！");
+      console.log("保存的配方数据：", formulaData);
+    }
+  </script>
 </body>
 </html>
