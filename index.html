@@ -69,7 +69,9 @@
     </div>
 
     <h1>调色匠配方计算工具</h1>
-
+    
+    <button class="btn" onclick="openFormulaLibrary()">配方库</button>
+    
     <div>
         <label for="formulaID">配方编号: </label>
         <input type="text" id="formulaID" placeholder="输入配方编号" />
@@ -94,7 +96,6 @@
             </tr>
         </thead>
         <tbody>
-            <!-- 保留15行输入框 -->
             <script>
                 for (let i = 0; i < 15; i++) {
                     document.write(`
@@ -110,82 +111,9 @@
         </tbody>
     </table>
 
-    <h2>配方库</h2>
-    <input type="text" id="searchFormula" placeholder="搜索配方编号" oninput="searchFormula()" />
-    <div id="formulaStorage"></div>
-
     <script>
-        let formulas = [];
-        
-        function updatePercentage() {
-            let totalWeight = 0;
-            document.querySelectorAll('.inputWeight').forEach(input => {
-                totalWeight += parseFloat(input.value) || 0;
-            });
-
-            document.querySelectorAll('.inputWeight').forEach((input, index) => {
-                const percentageInput = document.querySelectorAll('.percentage')[index];
-                const weight = parseFloat(input.value) || 0;
-                const percentage = (weight / totalWeight * 100) || 0;
-                percentageInput.value = percentage.toFixed(2) + "%";
-            });
-        }
-
-        function calculate() {
-            const totalQuantity = parseFloat(document.getElementById('totalQuantity').value) || 0;
-
-            document.querySelectorAll('.percentage').forEach((percentageInput, index) => {
-                const percentage = parseFloat(percentageInput.value.replace('%', '')) || 0;
-                const totalAmountInput = document.querySelectorAll('.totalAmount')[index];
-                const totalAmount = (percentage / 100) * totalQuantity;
-                totalAmountInput.value = totalAmount.toFixed(3) + " kg";
-            });
-        }
-
-        function saveFormula() {
-            const formulaID = document.getElementById('formulaID').value.trim();
-            const customerName = document.getElementById('customerName').value.trim();
-            if (!formulaID) {
-                alert("请填写配方编号");
-                return;
-            }
-
-            let formulaData = [];
-            document.querySelectorAll('#formulaTable tbody tr').forEach(row => {
-                let inputs = row.querySelectorAll('input');
-                formulaData.push({
-                    material: inputs[0].value,
-                    weight: inputs[1].value,
-                    percentage: inputs[2].value,
-                    totalAmount: inputs[3].value
-                });
-            });
-            
-            formulas.push({ id: formulaID, customer: customerName, data: formulaData });
-            renderFormulaStorage();
-        }
-
-        function renderFormulaStorage() {
-            const storageDiv = document.getElementById('formulaStorage');
-            storageDiv.innerHTML = '';
-            formulas.forEach(formula => {
-                let div = document.createElement('div');
-                div.classList.add('formula-box');
-                div.innerHTML = `<strong>${formula.id} - ${formula.customer}</strong>
-                                 <button onclick="toggleFormula(this)">显示全部</button>
-                                 <div class="hidden">${JSON.stringify(formula.data, null, 2)}</div>`;
-                storageDiv.appendChild(div);
-            });
-        }
-
-        function toggleFormula(button) {
-            let content = button.nextElementSibling;
-            content.classList.toggle('hidden');
-        }
-
-        function searchFormula() {
-            let searchValue = document.getElementById('searchFormula').value.trim();
-            // 搜索功能待优化
+        function openFormulaLibrary() {
+            window.location.href = 'formula_library.html';
         }
     </script>
 </body>
