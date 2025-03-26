@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>调色匠涂料</title>
+    <title>调色匠配方计算工具</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,24 +49,41 @@
                 font-size: 14px;
             }
         }
+        .formula-container {
+            margin-bottom: 20px;
+        }
+        .formula-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #fff;
+        }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <!-- 添加 logo 图片 -->
     <div style="text-align: center; margin-bottom: 20px;">
         <img src="logo1.png" alt="调色匠涂料" style="max-width: 200px; height: auto;" />
     </div>
 
-    <h1>调色匠涂料</h1>
+    <h1>调色匠配方计算工具</h1>
 
-    <!-- 大货投放数量和计算按钮 -->
+    <div>
+        <label for="formulaID">配方编号: </label>
+        <input type="text" id="formulaID" placeholder="输入配方编号" />
+        <label for="customerName">客户名称: </label>
+        <input type="text" id="customerName" placeholder="输入客户名称" />
+    </div>
+
     <div style="margin-bottom: 20px;">
         <label for="totalQuantity">大货投放数量 (kg): </label>
         <input type="number" id="totalQuantity" placeholder="输入大货投放数量" />
         <button class="btn" onclick="calculate()">计算</button>
+        <button class="btn" onclick="saveFormula()">保存</button>
     </div>
 
-    <!-- 配方表格 -->
     <table id="formulaTable">
         <thead>
             <tr>
@@ -77,43 +94,35 @@
             </tr>
         </thead>
         <tbody>
-            <!-- 保留15行代码不动 -->
-            <tr>
-                <td><input type="text" placeholder="原材料名称" /></td>
-                <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
-                <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
-                <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
-            </tr>
-            <!-- 其它表格行保持不变，略去重复部分 -->
+            <!-- 保留15行输入框 -->
+            <script>
+                for (let i = 0; i < 15; i++) {
+                    document.write(`
+                        <tr>
+                            <td><input type="text" placeholder="原材料名称" /></td>
+                            <td><input type="number" class="inputWeight" placeholder="原始投料数量" oninput="updatePercentage()" /></td>
+                            <td><input type="text" class="percentage" placeholder="百分比" disabled /></td>
+                            <td><input type="text" class="totalAmount" placeholder="大货投放数量" disabled /></td>
+                        </tr>
+                    `);
+                }
+            </script>
         </tbody>
     </table>
 
-    <!-- 输出记录的表格 -->
-    <h2>历史记录</h2>
-    <table id="historyTable">
-        <thead>
-            <tr>
-                <th>原材料名称</th>
-                <th>原始投料数量 (kg)</th>
-                <th>百分比 (%)</th>
-                <th>大货投放数量 (kg)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- 历史记录将动态添加到此 -->
-        </tbody>
-    </table>
+    <h2>配方库</h2>
+    <input type="text" id="searchFormula" placeholder="搜索配方编号" oninput="searchFormula()" />
+    <div id="formulaStorage"></div>
 
     <script>
-        // 更新百分比
+        let formulas = [];
+        
         function updatePercentage() {
             let totalWeight = 0;
-            // 计算原料总数量
             document.querySelectorAll('.inputWeight').forEach(input => {
                 totalWeight += parseFloat(input.value) || 0;
             });
 
-            // 更新百分比
             document.querySelectorAll('.inputWeight').forEach((input, index) => {
                 const percentageInput = document.querySelectorAll('.percentage')[index];
                 const weight = parseFloat(input.value) || 0;
@@ -122,42 +131,61 @@
             });
         }
 
-        // 计算大货投放数量
         function calculate() {
             const totalQuantity = parseFloat(document.getElementById('totalQuantity').value) || 0;
 
-            // 更新大货投放数量
             document.querySelectorAll('.percentage').forEach((percentageInput, index) => {
                 const percentage = parseFloat(percentageInput.value.replace('%', '')) || 0;
                 const totalAmountInput = document.querySelectorAll('.totalAmount')[index];
                 const totalAmount = (percentage / 100) * totalQuantity;
-                totalAmountInput.value = totalAmount.toFixed(3) + " kg";  // 显示三位小数
+                totalAmountInput.value = totalAmount.toFixed(3) + " kg";
             });
-
-            // 输出当前记录到历史表格
-            addToHistory();
         }
 
-        // 将当前配方记录添加到历史表格
-        function addToHistory() {
-            const historyTable = document.getElementById('historyTable').getElementsByTagName('tbody')[0];
-            const rows = document.querySelectorAll('#formulaTable tbody tr');
+        function saveFormula() {
+            const formulaID = document.getElementById('formulaID').value.trim();
+            const customerName = document.getElementById('customerName').value.trim();
+            if (!formulaID) {
+                alert("请填写配方编号");
+                return;
+            }
 
-            rows.forEach(row => {
-                const cells = row.getElementsByTagName('td');
-                const materialName = cells[0].querySelector('input').value || '';
-                const inputWeight = cells[1].querySelector('input').value || '';
-                const percentage = cells[2].querySelector('input').value || '';
-                const totalAmount = cells[3].querySelector('input').value || '';
-
-                // 创建新的表格行
-                const newRow = historyTable.insertRow();
-
-                newRow.insertCell(0).innerText = materialName;
-                newRow.insertCell(1).innerText = inputWeight;
-                newRow.insertCell(2).innerText = percentage;
-                newRow.insertCell(3).innerText = totalAmount;
+            let formulaData = [];
+            document.querySelectorAll('#formulaTable tbody tr').forEach(row => {
+                let inputs = row.querySelectorAll('input');
+                formulaData.push({
+                    material: inputs[0].value,
+                    weight: inputs[1].value,
+                    percentage: inputs[2].value,
+                    totalAmount: inputs[3].value
+                });
             });
+            
+            formulas.push({ id: formulaID, customer: customerName, data: formulaData });
+            renderFormulaStorage();
+        }
+
+        function renderFormulaStorage() {
+            const storageDiv = document.getElementById('formulaStorage');
+            storageDiv.innerHTML = '';
+            formulas.forEach(formula => {
+                let div = document.createElement('div');
+                div.classList.add('formula-box');
+                div.innerHTML = `<strong>${formula.id} - ${formula.customer}</strong>
+                                 <button onclick="toggleFormula(this)">显示全部</button>
+                                 <div class="hidden">${JSON.stringify(formula.data, null, 2)}</div>`;
+                storageDiv.appendChild(div);
+            });
+        }
+
+        function toggleFormula(button) {
+            let content = button.nextElementSibling;
+            content.classList.toggle('hidden');
+        }
+
+        function searchFormula() {
+            let searchValue = document.getElementById('searchFormula').value.trim();
+            // 搜索功能待优化
         }
     </script>
 </body>
